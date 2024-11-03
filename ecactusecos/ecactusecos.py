@@ -21,6 +21,7 @@ from .exceptions import (
     EcactusEcosConnectionException,
     EcactusEcosException,
     EcactusEcosUnauthenticatedException,
+    EcactusEcosDataException,
 )
 
 
@@ -80,6 +81,8 @@ class EcactusEcos:
 
     async def _handle_authenticate_response(self, response, params):
         json = await response.json()
+        if json is None:
+            raise EcactusEcosDataException("Invalid data response")
         self._auth_token = json["data"][AUTH_ACCESS_TOKEN]
 
     async def customer_overview(self):
@@ -100,6 +103,8 @@ class EcactusEcos:
 
     async def _handle_customer_overview_response(self, response, params):
         json = await response.json()
+        if json is None:
+            raise EcactusEcosDataException("Invalid data response")
         self._customer_info = json["data"]
 
     async def device_overview(self):
@@ -118,6 +123,8 @@ class EcactusEcos:
 
     async def _handle_device_list_repsonse(self, response, params):
         json = await response.json()
+        if json is None:
+            raise EcactusEcosDataException("Invalid data response")
         self._devices = dict()
         for device in json["data"]:
             self._devices[device["deviceId"]] = device
@@ -169,7 +176,6 @@ class EcactusEcos:
                                 actual[source_type]
                                 for deviceId, actual in actuals.items()
                                 if (deviceIds is None or deviceId in deviceIds)
-                                and actual[source_type] != 0
                             )
                             * 100
                         )
@@ -204,6 +210,8 @@ class EcactusEcos:
 
     async def _handle_actuals_response(self, response, params):
         json = await response.json()
+        if json is None:
+            raise EcactusEcosDataException("Invalid data response")
         return json["data"]
 
     async def request(

@@ -17,3 +17,9 @@ class EcactusEcosConnectionException(EcactusEcosException):
     """An error occured in the connection with the API."""
 
     pass
+
+
+class EcactusEcosDataException(EcactusEcosException):
+    """An error occured receiving data with the API."""
+
+    pass

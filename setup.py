@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="ecactus-ecos-client",
-    version="0.1.3",
+    version="0.1.4",
     author="S.J.Hoeksma",
     author_email="",
     description="Client for Ecactus ECOS",
