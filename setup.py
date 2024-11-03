@@ -5,13 +5,13 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="ecactus-ecos-client",
-    version="0.1.2",
+    version="0.1.3",
     author="S.J.Hoeksma",
     author_email="",
     description="Client for Ecactus ECOS",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/sjhoeksma/ecactus-ecos-cloud/client",
+    url="https://github.com/sjhoeksma/ecactus-ecos-client",
     packages=setuptools.find_packages(),
     classifiers=[
         "Intended Audience :: Developers",
