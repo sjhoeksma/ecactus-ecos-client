@@ -1,2 +1,6 @@
-/.DS_Store
+.DS_Store
 /Pipfile.lock
+/build
+/dist
+/ecactus_ecos_client.egg-info
+__pycache__

@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="ecactus-ecos-client",
-    version="0.1.1",
+    version="0.1.2",
     author="S.J.Hoeksma",
     author_email="",
     description="Client for Ecactus ECOS",
@@ -20,5 +20,5 @@ setuptools.setup(
         "Programming Language :: Python :: 3",
         "Topic :: Home Automation",
     ],
-    python_requires=">=3.8",
+    python_requires=">=3.10",
 )

@@ -6,7 +6,7 @@ import time
 from yarl import URL
 
 from .const import (
-    API_HOST,
+    API_HOST_EU,
     AUTHENTICATION_PATH,
     ACTUALS_PATH,
     AUTH_ACCESS_TOKEN,
@@ -14,7 +14,9 @@ from .const import (
     DEVICE_LIST_PATH,
     AUTH_TOKEN_HEADER,
     DEFAULT_SOURCE_TYPES,
+    DEVICE_ALIAS_NAME,
 )
+
 from .exceptions import (
     EcactusEcosConnectionException,
     EcactusEcosException,
@@ -29,8 +31,8 @@ class EcactusEcos:
         self,
         username: str,
         password: str,
+        api_host: str = API_HOST_EU,
         api_scheme: str = "https",
-        api_host: str = API_HOST,
         api_port: int = 443,
         request_timeout: int = 10,
         source_types=DEFAULT_SOURCE_TYPES,
@@ -158,6 +160,7 @@ class EcactusEcos:
             actuals = await self.actuals()
             current_measurements = dict()
 
+            # When we have multiple devices we return the sum
             for source_type in self.source_types:
                 match source_type:
                     case "batterySoc":
@@ -165,7 +168,8 @@ class EcactusEcos:
                             min(
                                 actual[source_type]
                                 for deviceId, actual in actuals.items()
-                                if deviceIds is None or deviceId in deviceIds
+                                if (deviceIds is None or deviceId in deviceIds)
+                                and actual[source_type] != 0
                             )
                             * 100
                         )
@@ -175,6 +179,23 @@ class EcactusEcos:
                             for deviceId, actual in actuals.items()
                             if deviceIds is None or deviceId in deviceIds
                         )
+            # When no deviceIds are given we add all devices by alias
+            if deviceIds is None:
+                for source_type in self.source_types:
+                    for deviceId, actual in actuals.items():
+                        if (
+                            self._devices[deviceId] is not None
+                            and self._devices[deviceId][DEVICE_ALIAS_NAME] is not None
+                        ):
+                            match source_type:
+                                case "batterySoc":
+                                    current_measurements[
+                                        f"{self._devices[deviceId][DEVICE_ALIAS_NAME].lower()}{source_type[:1].upper() + source_type[1:]}"
+                                    ] = actual[source_type] * 100
+                                case _:
+                                    current_measurements[
+                                        f"{self._devices[deviceId][DEVICE_ALIAS_NAME].lower()}{source_type[:1].upper() + source_type[1:]}"
+                                    ] = actual[source_type]
             return current_measurements
 
         except EcactusEcosUnauthenticatedException as exception:

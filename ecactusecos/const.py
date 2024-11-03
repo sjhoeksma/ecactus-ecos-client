@@ -1,6 +1,16 @@
 """EcactusEcos constants"""
 
-API_HOST = "api-ecos-eu.weiheng-tech.com"
+API_HOST_EU = "api-ecos-eu.weiheng-tech.com"
+API_HOST_CN = "api-ecos-hu.weiheng-tech.com"
+API_HOST_AU = "api-ecos-au.weiheng-tech.com"
+
+API_HOSTS = [
+    API_HOST_EU,
+    API_HOST_CN,
+    API_HOST_AU,
+]
+
+DEVICE_ALIAS_NAME = "deviceAliasName"
 
 AUTH_ACCESS_TOKEN = "accessToken"
 
